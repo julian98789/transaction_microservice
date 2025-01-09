@@ -12,5 +12,5 @@ import lombok.*;
 public class ArticleQuantityRequest {
 
     @NotNull( message = Util.ARTICLE_QUANTITY_REQUIRED)
-    private Integer articleQuantity;
+    private Integer quantity;
 }

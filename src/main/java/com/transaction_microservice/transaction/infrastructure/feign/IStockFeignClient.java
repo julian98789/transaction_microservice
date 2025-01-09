@@ -1,6 +1,7 @@
 package com.transaction_microservice.transaction.infrastructure.feign;
 
 import com.transaction_microservice.transaction.application.dto.article_dto.ArticleQuantityRequest;
+import com.transaction_microservice.transaction.domain.util.Util;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "stock", url = "http://localhost:8080")
+@FeignClient(name = Util.STOCK_SERVICE_NAME, url = Util.STOCK_SERVICE_URL)
 public interface IStockFeignClient {
 
     @GetMapping("/api/article/{articleId}")

@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class SupplyRequest {
 
     @NotNull( message = Util.ARTICLE_QUANTITY_REQUIRED)
-    private Integer articleQuantity;
+    private Integer quantity;
 
     @NotNull( message = Util.NEXT_SUPPLY_DATE_NOT_FOUND)
     @Temporal(TemporalType.DATE)

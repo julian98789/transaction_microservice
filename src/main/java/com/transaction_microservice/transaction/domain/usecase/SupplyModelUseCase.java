@@ -7,15 +7,19 @@ import com.transaction_microservice.transaction.domain.security.IAuthenticationS
 import com.transaction_microservice.transaction.domain.spi.IStockConnectionPersistencePort;
 import com.transaction_microservice.transaction.domain.spi.ISupplyModelPersistencePort;
 import com.transaction_microservice.transaction.domain.util.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 
 public class SupplyModelUseCase implements ISupplyModelServicePort {
 
     private final ISupplyModelPersistencePort supplyModelPersistencePort;
     private final IStockConnectionPersistencePort stockConnectionPersistencePort;
     private final IAuthenticationSecurityPort authenticationSecurityPort;
+
+    private static final Logger logger = LoggerFactory.getLogger(SupplyModelUseCase.class);
 
     public SupplyModelUseCase(ISupplyModelPersistencePort supplyModelPersistencePort, IStockConnectionPersistencePort
             stockConnectionPersistencePort, IAuthenticationSecurityPort authenticationSecurityPort) {
@@ -34,7 +38,9 @@ public class SupplyModelUseCase implements ISupplyModelServicePort {
             throw new NotFoundException(Util.NEXT_SUPPLY_DATE_NOT_FOUND);
         }
 
-        supplyModel.setCreationDate(LocalDateTime.now());
+        logger.info("[Domain] valor de quantity: {} ", supplyModel.getQuantity());
+
+        supplyModel.setCreationDate(LocalDate.now());
         Long userId = authenticationSecurityPort.getAuthenticatedUserId();
         supplyModel.setUserId(userId);
         stockConnectionPersistencePort.updateQuantityArticle(supplyModel.getArticleId(), supplyModel.getQuantity());

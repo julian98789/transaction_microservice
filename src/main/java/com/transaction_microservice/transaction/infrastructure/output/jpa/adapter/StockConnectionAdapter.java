@@ -30,8 +30,8 @@ public class StockConnectionAdapter implements IStockConnectionPersistencePort {
     }
 
     @Override
-    public void updateQuantityArticle(Long articleId, Integer articleQuantity) {
-        ArticleQuantityRequest articleQuantityRequest = new ArticleQuantityRequest(articleQuantity);
+    public void updateQuantityArticle(Long articleId, Integer quantity) {
+        ArticleQuantityRequest articleQuantityRequest = new ArticleQuantityRequest(quantity);
         stockFeignClient.updateArticleQuantity(articleId, articleQuantityRequest);
     }
 

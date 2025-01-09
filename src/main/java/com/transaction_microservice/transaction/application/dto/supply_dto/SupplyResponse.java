@@ -9,6 +9,6 @@ import java.time.LocalDate;
 @Setter
 public class SupplyResponse {
     private Long articleId;
-    private Integer articleQuantity;
+    private Integer quantity;
     private LocalDate nextSupplyDate;
 }

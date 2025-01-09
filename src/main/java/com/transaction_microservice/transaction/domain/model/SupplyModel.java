@@ -1,6 +1,7 @@
 package com.transaction_microservice.transaction.domain.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
 
 public class SupplyModel {
 
@@ -12,12 +13,12 @@ public class SupplyModel {
 
     private Long userId;
 
-    private LocalDateTime creationDate;
+    private LocalDate creationDate;
 
-    private LocalDateTime nextSupplyDate;
+    private LocalDate nextSupplyDate;
 
     public SupplyModel(Long id, Long articleId, Integer quantity, Long userId,
-                       LocalDateTime creationDate, LocalDateTime nextSupplyDate) {
+                       LocalDate creationDate, LocalDate nextSupplyDate) {
         this.id = id;
         this.articleId = articleId;
         this.quantity = quantity;
@@ -50,14 +51,6 @@ public class SupplyModel {
         this.quantity = quantity;
     }
 
-    public LocalDateTime getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
-    }
-
     public Long getUserId() {
         return userId;
     }
@@ -66,11 +59,19 @@ public class SupplyModel {
         this.userId = userId;
     }
 
-    public LocalDateTime getNextSupplyDate() {
+    public LocalDate getNextSupplyDate() {
         return nextSupplyDate;
     }
 
-    public void setNextSupplyDate(LocalDateTime nextSupplyDate) {
+    public void setNextSupplyDate(LocalDate nextSupplyDate) {
         this.nextSupplyDate = nextSupplyDate;
+    }
+
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
     }
 }
