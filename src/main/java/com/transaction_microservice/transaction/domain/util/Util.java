@@ -18,6 +18,7 @@ public class Util {
     public static final String ARTICLE_QUANTITY_REQUIRED = "Se requiere cantidad del articulo";
 
     public static final int TOKEN_PREFIX_LENGTH = 7;
+    public static final String DATE_FORMAT = "yyyy-MM-dd";
 
 
 
