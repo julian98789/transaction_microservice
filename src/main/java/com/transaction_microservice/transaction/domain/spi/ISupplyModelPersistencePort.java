@@ -2,11 +2,10 @@ package com.transaction_microservice.transaction.domain.spi;
 
 import com.transaction_microservice.transaction.domain.model.SupplyModel;
 
-import java.time.LocalDate;
 
 public interface ISupplyModelPersistencePort {
 
-    void saveSupply(SupplyModel supplyModel);
+    SupplyModel saveSupply(SupplyModel supplyModel);
 
-    LocalDate findNextSupplyDateByArticleId(Long articleId);
+    SupplyModel getSupplyById(Long supplyId);
 }

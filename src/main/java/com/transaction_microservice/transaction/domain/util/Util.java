@@ -12,18 +12,14 @@ public class Util {
     public static final String STOCK_SERVICE_URL = "http://localhost:8080";
     public static final String ARTICLE_NOT_FOUND = "Articulo no encontrado";
     public static final String NEXT_SUPPLY_DATE_NOT_FOUND = "Se requiere la próxima fecha de suministro" ;
-    public static final String FIND_NEXT_SUPPLY_DATE_BY_ARTICLE_ID_QUERY =
-            "SELECT s.nextSupplyDate FROM SupplyEntity s WHERE s.articleId = :articleId ORDER BY s.nextSupplyDate DESC LIMIT 1";
-    public static final String ARTICLE_ID_PARAM = "articleId";
     public static final String ARTICLE_QUANTITY_REQUIRED = "Se requiere cantidad del articulo";
+    public static final String SUPPLY_NOT_FOUND = "Suministro no encontrado";
+    public static final String NEXT_SUPPLY_DATE_INVALID = "La proxima fecha de suministro no puede ser anterior a hoy";
 
     public static final int TOKEN_PREFIX_LENGTH = 7;
     public static final String DATE_FORMAT = "yyyy-MM-dd";
 
 
-
-    private Util() {
-        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
-    }
+    private Util() {}
 
 }

@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 public interface ISupplyModelServicePort {
 
-    void saveSupply(SupplyModel supplyModel, Long articleId);
+    SupplyModel saveSupply(SupplyModel supplyModel, Long articleId);
 
-    LocalDate getNextSupplyDate(Long articleId);
+    LocalDate getNextSupplyDate(Long supplyId);
 }

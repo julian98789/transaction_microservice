@@ -1,4 +1,4 @@
-package com.transaction_microservice.transaction.infrastructure.output.jpa.entity;
+package com.transaction_microservice.transaction.infrastructure.persistence.jpa.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

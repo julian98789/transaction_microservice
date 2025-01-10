@@ -1,14 +1,12 @@
 package com.transaction_microservice.transaction.domain.usecase;
 
 import com.transaction_microservice.transaction.domain.api.ISupplyModelServicePort;
+import com.transaction_microservice.transaction.domain.exception.InvalidSupplyDateException;
 import com.transaction_microservice.transaction.domain.exception.NotFoundException;
 import com.transaction_microservice.transaction.domain.model.SupplyModel;
-import com.transaction_microservice.transaction.domain.security.IAuthenticationSecurityPort;
 import com.transaction_microservice.transaction.domain.spi.IStockConnectionPersistencePort;
 import com.transaction_microservice.transaction.domain.spi.ISupplyModelPersistencePort;
 import com.transaction_microservice.transaction.domain.util.Util;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 
@@ -17,39 +15,36 @@ public class SupplyModelUseCase implements ISupplyModelServicePort {
 
     private final ISupplyModelPersistencePort supplyModelPersistencePort;
     private final IStockConnectionPersistencePort stockConnectionPersistencePort;
-    private final IAuthenticationSecurityPort authenticationSecurityPort;
 
-    private static final Logger logger = LoggerFactory.getLogger(SupplyModelUseCase.class);
-
-    public SupplyModelUseCase(ISupplyModelPersistencePort supplyModelPersistencePort, IStockConnectionPersistencePort
-            stockConnectionPersistencePort, IAuthenticationSecurityPort authenticationSecurityPort) {
+    public SupplyModelUseCase(ISupplyModelPersistencePort supplyModelPersistencePort, IStockConnectionPersistencePort stockConnectionPersistencePort) {
         this.supplyModelPersistencePort = supplyModelPersistencePort;
         this.stockConnectionPersistencePort = stockConnectionPersistencePort;
-        this.authenticationSecurityPort = authenticationSecurityPort;
     }
 
     @Override
-    public void saveSupply(SupplyModel supplyModel, Long articleId) {
-        supplyModel.setArticleId(articleId);
+    public SupplyModel saveSupply(SupplyModel supplyModel, Long articleId) {
+
         if (!stockConnectionPersistencePort.existById(articleId)) {
             throw new NotFoundException(Util.ARTICLE_NOT_FOUND);
         }
-        if (supplyModel.getNextSupplyDate() == null) {
-            throw new NotFoundException(Util.NEXT_SUPPLY_DATE_NOT_FOUND);
+        if (supplyModel.getNextSupplyDate().isBefore(LocalDate.now())) {
+            throw new InvalidSupplyDateException(Util.NEXT_SUPPLY_DATE_INVALID);
         }
 
-        logger.info("[Domain] valor de quantity: {} ", supplyModel.getQuantity());
-
-        supplyModel.setCreationDate(LocalDate.now());
-        Long userId = authenticationSecurityPort.getAuthenticatedUserId();
-        supplyModel.setUserId(userId);
         stockConnectionPersistencePort.updateQuantityArticle(supplyModel.getArticleId(), supplyModel.getQuantity());
-        supplyModelPersistencePort.saveSupply(supplyModel);
 
+        return supplyModelPersistencePort.saveSupply(supplyModel);
     }
 
     @Override
-    public LocalDate getNextSupplyDate(Long articleId) {
-        return supplyModelPersistencePort.findNextSupplyDateByArticleId(articleId);
+    public LocalDate getNextSupplyDate(Long supplyId) {
+
+        SupplyModel supplyModel = supplyModelPersistencePort.getSupplyById(supplyId);
+
+        if (supplyModel == null) {
+            throw new NotFoundException(Util.SUPPLY_NOT_FOUND);
+        }
+
+        return supplyModel.getNextSupplyDate();
     }
 }

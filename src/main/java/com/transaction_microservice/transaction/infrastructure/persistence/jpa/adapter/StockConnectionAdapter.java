@@ -1,4 +1,4 @@
-package com.transaction_microservice.transaction.infrastructure.output.jpa.adapter;
+package com.transaction_microservice.transaction.infrastructure.persistence.jpa.adapter;
 
 import com.transaction_microservice.transaction.application.dto.article_dto.ArticleQuantityRequest;
 import com.transaction_microservice.transaction.domain.spi.IStockConnectionPersistencePort;
