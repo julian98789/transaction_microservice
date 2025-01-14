@@ -1,4 +1,4 @@
-package com.transaction_microservice.transaction.security.adapter;
+package com.transaction_microservice.transaction.infrastructure.security.adapter;
 
 import com.transaction_microservice.transaction.domain.security.IAuthenticationSecurityPort;
 import lombok.RequiredArgsConstructor;

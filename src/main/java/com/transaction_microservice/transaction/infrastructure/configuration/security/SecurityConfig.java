@@ -1,7 +1,7 @@
 package com.transaction_microservice.transaction.infrastructure.configuration.security;
 
 
-import com.transaction_microservice.transaction.security.service.JwtDetailsService;
+import com.transaction_microservice.transaction.infrastructure.security.service.JwtDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,6 @@
 package com.transaction_microservice.transaction.infrastructure.configuration.feign;
 
-import com.transaction_microservice.transaction.infrastructure.feign.interceptor.JwtRequestInterceptor;
+import com.transaction_microservice.transaction.infrastructure.http.feign.interceptor.JwtRequestInterceptor;
 import org.springframework.context.annotation.Configuration;
 import feign.Client;
 import feign.Logger;
