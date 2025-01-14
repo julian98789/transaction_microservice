@@ -1,4 +1,4 @@
-package com.transaction_microservice.transaction.infrastructure.feign.interceptor;
+package com.transaction_microservice.transaction.infrastructure.http.feign.interceptor;
 
 import com.transaction_microservice.transaction.domain.util.Util;
 import feign.RequestInterceptor;

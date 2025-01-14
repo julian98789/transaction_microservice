@@ -3,7 +3,7 @@ package com.transaction_microservice.transaction.infrastructure.configuration.se
 
 
 import com.transaction_microservice.transaction.domain.util.Util;
-import com.transaction_microservice.transaction.security.service.JwtDetailsService;
+import com.transaction_microservice.transaction.infrastructure.security.service.JwtDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

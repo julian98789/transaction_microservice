@@ -2,7 +2,7 @@ package com.transaction_microservice.transaction.infrastructure.persistence.jpa.
 
 import com.transaction_microservice.transaction.application.dto.article_dto.ArticleQuantityRequest;
 import com.transaction_microservice.transaction.domain.spi.IStockConnectionPersistencePort;
-import com.transaction_microservice.transaction.infrastructure.feign.IStockFeignClient;
+import com.transaction_microservice.transaction.infrastructure.http.feign.IStockFeignClient;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 

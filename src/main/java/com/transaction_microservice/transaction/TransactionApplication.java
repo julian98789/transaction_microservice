@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
-@EnableFeignClients(basePackages = "com.transaction_microservice.transaction.infrastructure.feign")
+@EnableFeignClients(basePackages = "com.transaction_microservice.transaction.infrastructure.http.feign")
 public class TransactionApplication {
 
 	public static void main(String[] args) {

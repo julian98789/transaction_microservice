@@ -6,12 +6,12 @@ import com.transaction_microservice.transaction.domain.security.IAuthenticationS
 import com.transaction_microservice.transaction.domain.spi.IStockConnectionPersistencePort;
 import com.transaction_microservice.transaction.domain.spi.ISupplyModelPersistencePort;
 import com.transaction_microservice.transaction.domain.usecase.SupplyModelUseCase;
-import com.transaction_microservice.transaction.infrastructure.feign.IStockFeignClient;
+import com.transaction_microservice.transaction.infrastructure.http.feign.IStockFeignClient;
 import com.transaction_microservice.transaction.infrastructure.persistence.jpa.adapter.StockConnectionAdapter;
 import com.transaction_microservice.transaction.infrastructure.persistence.jpa.adapter.SupplyJpaAdapter;
 import com.transaction_microservice.transaction.infrastructure.persistence.jpa.mapper.ISupplyEntityMapper;
 import com.transaction_microservice.transaction.infrastructure.persistence.jpa.repository.ISupplyRepository;
-import com.transaction_microservice.transaction.security.adapter.AuthenticationAdapter;
+import com.transaction_microservice.transaction.infrastructure.security.adapter.AuthenticationAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
