@@ -15,8 +15,8 @@ import lombok.Setter;
 public class SaleDetailsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "sale_details_id")
-    private Long saleDetailsId;
+    @Column(name = "id")
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "sale_id", nullable = false)

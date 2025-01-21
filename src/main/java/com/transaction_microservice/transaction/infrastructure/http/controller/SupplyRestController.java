@@ -38,7 +38,7 @@ public class SupplyRestController {
     })
     @PreAuthorize(Util.ROLE_AUX_BODEGA )
     @PostMapping("/agregar-articulo/{articleId}")
-    public ResponseEntity<SupplyResponse> agregarProductToSupply(@Valid @PathVariable Long articleId, @RequestBody SupplyRequest supplyRequest) {
+    public ResponseEntity<SupplyResponse> agregarArticletToSupply(@Valid @PathVariable Long articleId, @RequestBody SupplyRequest supplyRequest) {
 
         SupplyResponse supplyResponse = supplyHandler.saveSupply(supplyRequest, articleId);
 
