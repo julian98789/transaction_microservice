@@ -19,7 +19,7 @@ public class SaleDetailsEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "sale_id", nullable = false)
+    @JoinColumn(name = "sale_id")
     private SalesEntity sale;
 
     @Column(name = "article_id", nullable = false)
@@ -34,8 +34,4 @@ public class SaleDetailsEntity {
     @Column(name = "subtotal", nullable = false)
     private Double subtotal;
 
-    public Double calculateSubtotal() {
-        setSubtotal(this.price * this.quantity);
-        return this.subtotal;
-    }
 }

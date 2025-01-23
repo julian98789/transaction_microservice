@@ -17,8 +17,6 @@ import java.security.Key;
 @RequiredArgsConstructor
 public class JwtService {
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtService.class);
-
     @Value("${JWT_SECRET_KEY}")
     private String secretKey;
 
