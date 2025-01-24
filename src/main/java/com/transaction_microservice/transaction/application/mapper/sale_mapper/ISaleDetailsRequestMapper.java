@@ -12,5 +12,4 @@ public interface ISaleDetailsRequestMapper {
 
     SaleDetailsRequest saleDetailsModelToSaleDetailsRequest(SaleDetailsModel saleDetailsModel);
 
-    List<SaleDetailsRequest> saleDetailsModelListToSaleDetailsRequestList(List<SaleDetailsModel> saleDetailsModelList);
 }

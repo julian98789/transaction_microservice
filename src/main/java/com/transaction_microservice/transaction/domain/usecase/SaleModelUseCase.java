@@ -75,28 +75,24 @@ public class SaleModelUseCase implements ISaleModelServicePort {
             saleDetailsModels.add(saleDetailsModel);
         }
 
-        logger.info("entre1");
-        logger.info("entre{}", sale.getUserId());
-        logger.info("entre{}", sale.getCreationDate());
-        logger.info("entre{}", sale.getTotal());
-        // Guardar la venta (SaleModel) primero para obtener el ID
         SalesModel saleFinal = saleModelPersistencePort.saveSale(sale);
-        logger.info("entre2");
-        logger.info("Id1{}", saleFinal.getId());
 
-        // Asignar la venta a cada detalle
+
         saleDetailsModels.forEach(detail -> detail.setSale(saleFinal));
 
 
-        // Guardar cada detalle de la venta individualmente
         saleDetailsModels.forEach(detail -> saleModelPersistencePort.saveSaleDetailsModel(detail));
 
-        // Calcular el total de la venta basado en los subtotales de los detalles
+
         Double total = saleDetailsModels.stream().mapToDouble(SaleDetailsModel::getSubtotal).sum();
         saleFinal.setTotal(total);
 
-        // Actualizar la venta con el total calculado
+
         saleModelPersistencePort.saveSale(saleFinal);
+
+        saleFinal.setSaleDetails(saleDetailsModels);
+
+
 
         return saleFinal;
     }

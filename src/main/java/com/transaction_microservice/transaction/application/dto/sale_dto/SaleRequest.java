@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -14,6 +15,6 @@ public class SaleRequest {
     private Long userId;
     private Double total;
     private LocalDate creationDate;
-    private List<SaleDetailsRequest> saleDetails;
+    private List<SaleDetailsRequest> saleDetails = new ArrayList<>();
 
 }
