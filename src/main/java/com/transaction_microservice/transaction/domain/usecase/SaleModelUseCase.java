@@ -6,6 +6,7 @@ import com.transaction_microservice.transaction.domain.exception.InsufficientSto
 import com.transaction_microservice.transaction.domain.exception.PurchaseException;
 import com.transaction_microservice.transaction.domain.model.CartModel;
 import com.transaction_microservice.transaction.domain.model.SaleDetailsModel;
+import com.transaction_microservice.transaction.domain.model.SaleReportModel;
 import com.transaction_microservice.transaction.domain.model.SalesModel;
 import com.transaction_microservice.transaction.domain.security.IAuthenticationSecurityPort;
 import com.transaction_microservice.transaction.domain.spi.ICartConnectionPersistencePort;
@@ -41,15 +42,17 @@ public class SaleModelUseCase implements ISaleModelServicePort {
     }
 
     @Override
-    public void buyCart() {
+    public SaleReportModel buyItemsFromTheCart() {
         Long userId = authenticationPersistencePort.getAuthenticatedUserId();
         List<CartModel> articlesInCart = cartConnectionPersistencePort.getCartByUser(userId);
         try {
             articlesInCart.forEach(cart -> validateStockAvailability(cart.getArticleId(), cart.getQuantity()));
             SalesModel salesModel = createSales(articlesInCart, userId);
             articlesInCart.forEach(cart -> reduceStockQuantity(cart.getArticleId(), cart.getQuantity()));
-            saleReportConnectionPersistencePort.createSaleReport(salesModel);
+            SaleReportModel saleReport = saleReportConnectionPersistencePort.createSaleReport(salesModel);
             cartConnectionPersistencePort.deleteCartByUser(userId);
+
+            return  saleReport;
 
         }catch (Exception e){
             throw new PurchaseException(Util.PURCHASE_ERROR, e);
@@ -81,7 +84,9 @@ public class SaleModelUseCase implements ISaleModelServicePort {
         saleDetailsModels.forEach(detail -> detail.setSale(saleFinal));
 
 
-        saleDetailsModels.forEach(detail -> saleModelPersistencePort.saveSaleDetailsModel(detail));
+        saleDetailsModels = saleDetailsModels.stream()
+                .map(saleModelPersistencePort::saveSaleDetailsModel)
+                .toList();
 
 
         Double total = saleDetailsModels.stream().mapToDouble(SaleDetailsModel::getSubtotal).sum();
@@ -95,6 +100,7 @@ public class SaleModelUseCase implements ISaleModelServicePort {
 
 
         return saleFinal;
+
     }
 
 

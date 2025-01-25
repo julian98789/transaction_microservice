@@ -3,7 +3,7 @@ package com.transaction_microservice.transaction.infrastructure.http.controller;
 import com.transaction_microservice.transaction.application.dto.supply_dto.NextSupplyResponse;
 import com.transaction_microservice.transaction.application.dto.supply_dto.SupplyRequest;
 import com.transaction_microservice.transaction.application.dto.supply_dto.SupplyResponse;
-import com.transaction_microservice.transaction.application.handler.ISupplyHandler;
+import com.transaction_microservice.transaction.application.handler.supply_handler.ISupplyHandler;
 import com.transaction_microservice.transaction.domain.util.Util;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

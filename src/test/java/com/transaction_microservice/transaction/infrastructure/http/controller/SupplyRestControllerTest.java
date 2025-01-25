@@ -3,7 +3,7 @@ package com.transaction_microservice.transaction.infrastructure.http.controller;
 import com.transaction_microservice.transaction.application.dto.supply_dto.NextSupplyResponse;
 import com.transaction_microservice.transaction.application.dto.supply_dto.SupplyRequest;
 import com.transaction_microservice.transaction.application.dto.supply_dto.SupplyResponse;
-import com.transaction_microservice.transaction.application.handler.ISupplyHandler;
+import com.transaction_microservice.transaction.application.handler.supply_handler.ISupplyHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

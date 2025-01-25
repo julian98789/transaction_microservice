@@ -2,6 +2,7 @@ package com.transaction_microservice.transaction.domain.model;
 
 
 public class SaleDetailsModel {
+
     private Long id;
 
     private SalesModel sale;

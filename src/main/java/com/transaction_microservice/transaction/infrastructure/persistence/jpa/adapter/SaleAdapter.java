@@ -38,9 +38,12 @@ public class SaleAdapter implements ISaleModelPersistencePort {
     public SaleDetailsModel saveSaleDetailsModel(SaleDetailsModel saleDetailsModel) {
         logger.info("Guardando detalles de venta{}", saleDetailsModel.getSale().getId());
         SaleDetailsEntity saleDetailsEntity = saleDetailsEntityMapper.saleDetailsModelToSaleDetailsEntity(saleDetailsModel);
-        logger.info("Guardando detalles de venta entidad{}", saleDetailsEntity.getSale().getId());
-         SaleDetailsModel saleDetailsModels = saleDetailsEntityMapper.saleDetailsEntityToSaleDetailsModel(saleDetailsRepository.save(saleDetailsEntity));
 
-    return saleDetailsModels;
+        SaleDetailsEntity saveDetails= saleDetailsRepository.save(saleDetailsEntity);
+        logger.info("Guardando detalles de venta entidad{}", saleDetailsEntity.getId());
+
+         SaleDetailsModel modelo = saleDetailsEntityMapper.saleDetailsEntityToSaleDetailsModel(saveDetails);
+        logger.info("modelo {}", modelo.getId());
+    return modelo;
     }
 }

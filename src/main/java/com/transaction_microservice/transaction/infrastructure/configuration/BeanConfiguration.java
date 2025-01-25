@@ -2,6 +2,7 @@ package com.transaction_microservice.transaction.infrastructure.configuration;
 
 
 import com.transaction_microservice.transaction.application.mapper.cart_mapper.ICartResponseMapper;
+import com.transaction_microservice.transaction.application.mapper.sale_mapper.ISaleReportResponseMapper;
 import com.transaction_microservice.transaction.application.mapper.sale_mapper.ISaleRequestMapper;
 import com.transaction_microservice.transaction.domain.api.ISaleModelServicePort;
 import com.transaction_microservice.transaction.domain.api.ISupplyModelServicePort;
@@ -67,8 +68,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public ISaleReportConnectionPersistencePort saleReportConnectionPersistencePort(IReportFeignClient iReportFeignClient, ISaleRequestMapper saleRequestMapper){
-        return new ISaleReportConnectionAdapter(iReportFeignClient, saleRequestMapper);
+    public ISaleReportConnectionPersistencePort saleReportConnectionPersistencePort(IReportFeignClient iReportFeignClient, ISaleRequestMapper saleRequestMapper, ISaleReportResponseMapper saleReportResponseMapper){
+        return new ISaleReportConnectionAdapter(iReportFeignClient, saleRequestMapper, saleReportResponseMapper);
     }
 
     @Bean

@@ -1,4 +1,4 @@
-package com.transaction_microservice.transaction.application.handler;
+package com.transaction_microservice.transaction.application.handler.supply_handler;
 
 import com.transaction_microservice.transaction.application.dto.supply_dto.NextSupplyResponse;
 import com.transaction_microservice.transaction.application.dto.supply_dto.SupplyRequest;
