@@ -29,21 +29,17 @@ public class SaleAdapter implements ISaleModelPersistencePort {
     @Override
     public SalesModel saveSale(SalesModel salesModel) {
         SalesEntity salesEntity = saleEntityMapper.salesModelToSalesEntity(salesModel);
-        salesEntity.setCreationDate(LocalDate.now());
         return saleEntityMapper.salesEntityToSalesModel(saleRepository.save(salesEntity));
     }
 
 
     @Override
     public SaleDetailsModel saveSaleDetailsModel(SaleDetailsModel saleDetailsModel) {
-        logger.info("Guardando detalles de venta{}", saleDetailsModel.getSale().getId());
         SaleDetailsEntity saleDetailsEntity = saleDetailsEntityMapper.saleDetailsModelToSaleDetailsEntity(saleDetailsModel);
 
         SaleDetailsEntity saveDetails= saleDetailsRepository.save(saleDetailsEntity);
-        logger.info("Guardando detalles de venta entidad{}", saleDetailsEntity.getId());
 
          SaleDetailsModel modelo = saleDetailsEntityMapper.saleDetailsEntityToSaleDetailsModel(saveDetails);
-        logger.info("modelo {}", modelo.getId());
     return modelo;
     }
 }

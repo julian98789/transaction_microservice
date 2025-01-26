@@ -22,6 +22,7 @@ public class Util {
     public static final int TOKEN_PREFIX_LENGTH = 7;
     public static final String DATE_FORMAT = "yyyy-MM-dd";
     public static final String PURCHASE_ERROR = "Error al realizar la compra ";
+    public static final String CART_EMPTY = "El carrito esta vacio";
 
 
 

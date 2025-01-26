@@ -1,6 +1,7 @@
 package com.transaction_microservice.transaction.infrastructure.exception.global;
 
 
+import com.transaction_microservice.transaction.domain.exception.CartEmptyException;
 import com.transaction_microservice.transaction.domain.exception.InsufficientStockException;
 import com.transaction_microservice.transaction.domain.exception.InvalidSupplyDateException;
 import com.transaction_microservice.transaction.domain.exception.NotFoundException;
@@ -13,6 +14,11 @@ import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(CartEmptyException.class)
+    public ResponseEntity<String> cartEmptyException(CartEmptyException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<String> notFoundException(NotFoundException ex) {

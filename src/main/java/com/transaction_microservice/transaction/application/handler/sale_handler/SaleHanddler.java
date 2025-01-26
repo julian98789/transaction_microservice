@@ -16,8 +16,8 @@ public class SaleHanddler implements ISaleHanddler{
     @Override
     public SaleReportResponse buyItemsFromTheCart() {
 
-        saleServicePort.buyItemsFromTheCart();
 
-        return saleReportResponseMapper.saleReportModelToSaleReportResponse(saleServicePort.buyItemsFromTheCart());
+        return saleReportResponseMapper.saleReportModelToSaleReportResponse(
+                saleServicePort.buyItemsFromTheCart());
     }
 }

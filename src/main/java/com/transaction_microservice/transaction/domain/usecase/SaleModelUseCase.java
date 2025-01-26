@@ -1,7 +1,9 @@
 package com.transaction_microservice.transaction.domain.usecase;
 
+import com.transaction_microservice.transaction.application.dto.sale_dto.SaleDetailsRequest;
 import com.transaction_microservice.transaction.domain.api.ISaleModelServicePort;
 import com.transaction_microservice.transaction.domain.api.ISupplyModelServicePort;
+import com.transaction_microservice.transaction.domain.exception.CartEmptyException;
 import com.transaction_microservice.transaction.domain.exception.InsufficientStockException;
 import com.transaction_microservice.transaction.domain.exception.PurchaseException;
 import com.transaction_microservice.transaction.domain.model.CartModel;
@@ -45,6 +47,10 @@ public class SaleModelUseCase implements ISaleModelServicePort {
     public SaleReportModel buyItemsFromTheCart() {
         Long userId = authenticationPersistencePort.getAuthenticatedUserId();
         List<CartModel> articlesInCart = cartConnectionPersistencePort.getCartByUser(userId);
+        if (isCartEmpty(articlesInCart)) {
+            throw new CartEmptyException(Util.CART_EMPTY);
+        }
+
         try {
             articlesInCart.forEach(cart -> validateStockAvailability(cart.getArticleId(), cart.getQuantity()));
             SalesModel salesModel = createSales(articlesInCart, userId);
@@ -60,14 +66,16 @@ public class SaleModelUseCase implements ISaleModelServicePort {
 
     }
 
-    private SalesModel createSales(List<CartModel> articlesInCart, Long userId) {
 
+
+    private SalesModel createSales(List<CartModel> articlesInCart, Long userId) {
         SalesModel sale = new SalesModel();
         sale.setUserId(userId);
-        sale.setTotal(0.0);
         sale.setCreationDate(LocalDate.now());
 
         List<SaleDetailsModel> saleDetailsModels = new ArrayList<>();
+        double total = 0.0;
+
         for (CartModel cart : articlesInCart) {
             SaleDetailsModel saleDetailsModel = new SaleDetailsModel();
             saleDetailsModel.setArticleId(cart.getArticleId());
@@ -76,35 +84,25 @@ public class SaleModelUseCase implements ISaleModelServicePort {
             saleDetailsModel.setSubtotal(saleDetailsModel.getPrice() * saleDetailsModel.getQuantity());
 
             saleDetailsModels.add(saleDetailsModel);
+            total += saleDetailsModel.getSubtotal();
         }
 
+        sale.setTotal(total);
         SalesModel saleFinal = saleModelPersistencePort.saveSale(sale);
 
-
         saleDetailsModels.forEach(detail -> detail.setSale(saleFinal));
-
-
-        saleDetailsModels = saleDetailsModels.stream()
+        List<SaleDetailsModel> savedDetails = saleDetailsModels.stream()
                 .map(saleModelPersistencePort::saveSaleDetailsModel)
                 .toList();
-
-
-        Double total = saleDetailsModels.stream().mapToDouble(SaleDetailsModel::getSubtotal).sum();
-        saleFinal.setTotal(total);
-
-
-        saleModelPersistencePort.saveSale(saleFinal);
-
-        saleFinal.setSaleDetails(saleDetailsModels);
-
-
+        saleFinal.setSaleDetails(savedDetails);
 
         return saleFinal;
-
     }
 
 
-
+    private boolean isCartEmpty(List<CartModel> articlesInCart) {
+        return articlesInCart == null || articlesInCart.isEmpty();
+    }
 
 
     private void validateStockAvailability(Long articleId, int totalQuantity) {
