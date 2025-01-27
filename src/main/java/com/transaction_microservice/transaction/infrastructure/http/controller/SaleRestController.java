@@ -6,7 +6,7 @@ import com.transaction_microservice.transaction.domain.util.Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class SaleRestController {
 
-    private final ISaleHanddler saleHanddler;
+    private final ISaleHanddler saleHandler;
 
     @PreAuthorize(Util.ROLE_CLIENT )
-    @GetMapping("/buy-cart")
+    @PostMapping("/buy-cart")
     public ResponseEntity<SaleReportResponse> buyItems() {
 
-        return ResponseEntity.ok(saleHanddler.buyItemsFromTheCart());
+        return ResponseEntity.ok(saleHandler.buyItemsFromTheCart());
     }
 }

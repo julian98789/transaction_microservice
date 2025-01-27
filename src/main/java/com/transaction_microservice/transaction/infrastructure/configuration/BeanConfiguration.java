@@ -33,7 +33,6 @@ public class BeanConfiguration {
     private final ISupplyEntityMapper supplyEntityMapper;
     private final ISaleEntityMapper saleEntityMapper;
     private final ISaleDetailsEntityMapper saleDetailsEntityMapper;
-    private final ISaleDetailsRepository saleDetailsRepository;
 
     @Bean
     public ISupplyModelPersistencePort supplyModelPersistencePort() {
@@ -64,7 +63,11 @@ public class BeanConfiguration {
 
     @Bean
     public ISaleModelPersistencePort saleModelPersistencePort(ISaleRepository saleRepository) {
-        return new SaleAdapter(saleRepository,saleDetailsRepository,saleEntityMapper,saleDetailsEntityMapper);
+        return new SaleJpaAdapter(saleRepository,saleEntityMapper);
+    }
+
+    @Bean ISaleDetailModelPersistencePort saleDetailModelPersistencePort(ISaleDetailsRepository saleDetailsRepository){
+        return new SaleDetailJpaAdapter(saleDetailsRepository, saleDetailsEntityMapper);
     }
 
     @Bean
@@ -79,7 +82,8 @@ public class BeanConfiguration {
             ISaleModelPersistencePort saleModelPersistencePort,
             IStockConnectionPersistencePort stockConnectionPersistencePort,
             ISaleReportConnectionPersistencePort saleReportConnectionPersistencePort,
-            ISupplyModelServicePort supplyModelServicePort){
+            ISupplyModelServicePort supplyModelServicePort,
+            ISaleDetailModelPersistencePort saleDetailModelPersistencePort){
 
         return new SaleModelUseCase(
                 cartConnectionPersistencePort,
@@ -87,7 +91,8 @@ public class BeanConfiguration {
                 saleModelPersistencePort,
                 stockConnectionPersistencePort,
                 saleReportConnectionPersistencePort,
-                supplyModelServicePort);
+                supplyModelServicePort,
+                saleDetailModelPersistencePort);
     }
 
 }

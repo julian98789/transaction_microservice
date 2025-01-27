@@ -1,6 +1,6 @@
 package com.transaction_microservice.transaction.domain.api;
 
-import com.transaction_microservice.transaction.domain.model.SupplyModel;
+import com.transaction_microservice.transaction.domain.model.supply.SupplyModel;
 
 import java.time.LocalDate;
 

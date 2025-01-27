@@ -7,7 +7,7 @@ import com.transaction_microservice.transaction.application.handler.supply_handl
 import com.transaction_microservice.transaction.application.mapper.supply_mapper.ISupplyRequestMapper;
 import com.transaction_microservice.transaction.application.mapper.supply_mapper.ISupplyResponseMapper;
 import com.transaction_microservice.transaction.domain.api.ISupplyModelServicePort;
-import com.transaction_microservice.transaction.domain.model.SupplyModel;
+import com.transaction_microservice.transaction.domain.model.supply.SupplyModel;
 import com.transaction_microservice.transaction.domain.security.IAuthenticationSecurityPort;
 import com.transaction_microservice.transaction.domain.util.Util;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
-public class SupplyHandlerTest {
+ class SupplyHandlerTest {
 
     @Mock
     private ISupplyRequestMapper supplyRequestMapper;

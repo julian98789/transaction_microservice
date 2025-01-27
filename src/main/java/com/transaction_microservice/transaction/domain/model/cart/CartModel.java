@@ -1,30 +1,28 @@
-package com.transaction_microservice.transaction.domain.model;
+package com.transaction_microservice.transaction.domain.model.cart;
 
 import java.time.LocalDate;
 
-
-public class SupplyModel {
+public class CartModel {
 
     private Long id;
 
     private Long articleId;
 
-    private Integer quantity;
-
     private Long userId;
+
+    private Integer quantity;
 
     private LocalDate creationDate;
 
-    private LocalDate nextSupplyDate;
+    private LocalDate lastUpdatedDate;
 
-    public SupplyModel(Long id, Long articleId, Integer quantity, Long userId,
-                       LocalDate creationDate, LocalDate nextSupplyDate) {
+    public CartModel(Long id, Long articleId, Long userId, Integer quantity, LocalDate creationDate, LocalDate lastUpdatedDate) {
         this.id = id;
         this.articleId = articleId;
-        this.quantity = quantity;
         this.userId = userId;
+        this.quantity = quantity;
         this.creationDate = creationDate;
-        this.nextSupplyDate = nextSupplyDate;
+        this.lastUpdatedDate = lastUpdatedDate;
     }
 
     public Long getId() {
@@ -43,14 +41,6 @@ public class SupplyModel {
         this.articleId = articleId;
     }
 
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
     public Long getUserId() {
         return userId;
     }
@@ -59,12 +49,12 @@ public class SupplyModel {
         this.userId = userId;
     }
 
-    public LocalDate getNextSupplyDate() {
-        return nextSupplyDate;
+    public Integer getQuantity() {
+        return quantity;
     }
 
-    public void setNextSupplyDate(LocalDate nextSupplyDate) {
-        this.nextSupplyDate = nextSupplyDate;
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public LocalDate getCreationDate() {
@@ -74,4 +64,13 @@ public class SupplyModel {
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
+
+    public LocalDate getLastUpdatedDate() {
+        return lastUpdatedDate;
+    }
+
+    public void setLastUpdatedDate(LocalDate lastUpdatedDate) {
+        this.lastUpdatedDate = lastUpdatedDate;
+    }
 }
+

@@ -1,11 +1,11 @@
 package com.transaction_microservice.transaction.domain.spi;
 
-import com.transaction_microservice.transaction.domain.model.SaleDetailsModel;
-import com.transaction_microservice.transaction.domain.model.SalesModel;
+import com.transaction_microservice.transaction.domain.model.sale.SaleDetailsModel;
+import com.transaction_microservice.transaction.domain.model.sale.SalesModel;
 
 public interface ISaleModelPersistencePort {
 
     SalesModel saveSale(SalesModel salesModel);
 
-    SaleDetailsModel saveSaleDetailsModel (SaleDetailsModel saleDetailsModel);
+
 }

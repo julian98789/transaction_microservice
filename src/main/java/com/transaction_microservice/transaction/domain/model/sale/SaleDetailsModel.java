@@ -1,4 +1,4 @@
-package com.transaction_microservice.transaction.domain.model;
+package com.transaction_microservice.transaction.domain.model.sale;
 
 
 public class SaleDetailsModel {

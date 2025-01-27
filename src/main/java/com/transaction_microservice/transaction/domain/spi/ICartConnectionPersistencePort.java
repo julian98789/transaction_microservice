@@ -1,6 +1,6 @@
 package com.transaction_microservice.transaction.domain.spi;
 
-import com.transaction_microservice.transaction.domain.model.CartModel;
+import com.transaction_microservice.transaction.domain.model.cart.CartModel;
 
 import java.util.List;
 

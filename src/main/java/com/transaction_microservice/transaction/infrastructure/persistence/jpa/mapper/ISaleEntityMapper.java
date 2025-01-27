@@ -1,6 +1,6 @@
 package com.transaction_microservice.transaction.infrastructure.persistence.jpa.mapper;
 
-import com.transaction_microservice.transaction.domain.model.SalesModel;
+import com.transaction_microservice.transaction.domain.model.sale.SalesModel;
 import com.transaction_microservice.transaction.infrastructure.persistence.jpa.entity.SalesEntity;
 import org.mapstruct.*;
 
