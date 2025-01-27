@@ -1,7 +1,7 @@
 package com.transaction_microservice.transaction.infrastructure.http.controller;
 
 import com.transaction_microservice.transaction.application.dto.sale_dto.SaleReportResponse;
-import com.transaction_microservice.transaction.application.handler.sale_handler.ISaleHanddler;
+import com.transaction_microservice.transaction.application.handler.sale_handler.ISaleHandler;
 import com.transaction_microservice.transaction.domain.util.Util;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class SaleRestController {
 
-    private final ISaleHanddler saleHandler;
+    private final ISaleHandler saleHandler;
 
     @Operation(summary = "Comprar artículos del carrito", description = "Este endpoint permite a un usuario autenticado comprar los artículos que tiene en su carrito.", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {

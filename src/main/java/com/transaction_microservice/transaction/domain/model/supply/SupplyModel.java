@@ -27,6 +27,9 @@ public class SupplyModel {
         this.nextSupplyDate = nextSupplyDate;
     }
 
+    public SupplyModel() {
+    }
+
     public Long getId() {
         return id;
     }

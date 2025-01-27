@@ -25,6 +25,9 @@ public class CartModel {
         this.lastUpdatedDate = lastUpdatedDate;
     }
 
+    public CartModel() {
+    }
+
     public Long getId() {
         return id;
     }

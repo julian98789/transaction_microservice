@@ -2,7 +2,7 @@ package com.transaction_microservice.transaction.application.handler.sale_handle
 
 import com.transaction_microservice.transaction.application.dto.sale_dto.SaleReportResponse;
 
-public interface ISaleHanddler {
+public interface ISaleHandler {
 
     SaleReportResponse buyItemsFromTheCart();
 }

@@ -8,14 +8,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class SaleHanddler implements ISaleHanddler{
+public class SaleHandler implements ISaleHandler {
 
     private final ISaleModelServicePort saleServicePort;
     private final ISaleReportResponseMapper saleReportResponseMapper;
 
     @Override
     public SaleReportResponse buyItemsFromTheCart() {
-
 
         return saleReportResponseMapper.saleReportModelToSaleReportResponse(
                 saleServicePort.buyItemsFromTheCart());
