@@ -1,4 +1,4 @@
-package com.transaction_microservice.transaction.domain.model;
+package com.transaction_microservice.transaction.domain.model.supply;
 
 import java.time.LocalDate;
 
@@ -25,6 +25,9 @@ public class SupplyModel {
         this.userId = userId;
         this.creationDate = creationDate;
         this.nextSupplyDate = nextSupplyDate;
+    }
+
+    public SupplyModel() {
     }
 
     public Long getId() {

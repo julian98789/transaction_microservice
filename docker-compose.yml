@@ -1,5 +1,5 @@
 services:
-  java-app-transaction:
+  app-transaction:
     build:
       context: .
       dockerfile: Dockerfile

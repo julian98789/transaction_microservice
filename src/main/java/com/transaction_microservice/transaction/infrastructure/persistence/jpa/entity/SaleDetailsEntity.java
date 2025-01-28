@@ -15,11 +15,11 @@ import lombok.Setter;
 public class SaleDetailsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "sale_details_id")
-    private Long saleDetailsId;
+    @Column(name = "id")
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "sale_id", nullable = false)
+    @JoinColumn(name = "sale_id")
     private SalesEntity sale;
 
     @Column(name = "article_id", nullable = false)
@@ -34,8 +34,4 @@ public class SaleDetailsEntity {
     @Column(name = "subtotal", nullable = false)
     private Double subtotal;
 
-    public Double calculateSubtotal() {
-        setSubtotal(this.price * this.quantity);
-        return this.subtotal;
-    }
 }
