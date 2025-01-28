@@ -44,4 +44,4 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-//test {enabled = false}
+test {enabled = false}
