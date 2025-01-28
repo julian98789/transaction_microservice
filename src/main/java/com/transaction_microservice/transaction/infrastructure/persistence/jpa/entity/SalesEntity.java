@@ -7,7 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,18 +20,19 @@ import java.util.List;
 public class SalesEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "sale_id")
-    private Long saleId;
+    @Column(name = "id")
+    private Long id;
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "total_amount", nullable = false)
-    private Double totalAmount;
+    @Column(name = "total", nullable = false)
+    private Double total;
 
     @Column(name = "creation_date", nullable = false)
-    private LocalDateTime creationDate;
+    private LocalDate creationDate;
 
-    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<SaleDetailsEntity> saleDetails;
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<SaleDetailsEntity> saleDetails = new ArrayList<>();
+
 }

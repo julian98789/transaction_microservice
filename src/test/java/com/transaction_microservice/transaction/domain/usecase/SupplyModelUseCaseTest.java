@@ -1,6 +1,6 @@
 package com.transaction_microservice.transaction.domain.usecase;
 
-import com.transaction_microservice.transaction.domain.model.SupplyModel;
+import com.transaction_microservice.transaction.domain.model.supply.SupplyModel;
 import com.transaction_microservice.transaction.domain.spi.IStockConnectionPersistencePort;
 import com.transaction_microservice.transaction.domain.spi.ISupplyModelPersistencePort;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +18,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doNothing;
 
-public class SupplyModelUseCaseTest {
+ class SupplyModelUseCaseTest {
 
     @Mock
     private ISupplyModelPersistencePort supplyModelPersistencePort;

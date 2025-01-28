@@ -3,7 +3,7 @@ package com.transaction_microservice.transaction.domain.usecase;
 import com.transaction_microservice.transaction.domain.api.ISupplyModelServicePort;
 import com.transaction_microservice.transaction.domain.exception.InvalidSupplyDateException;
 import com.transaction_microservice.transaction.domain.exception.NotFoundException;
-import com.transaction_microservice.transaction.domain.model.SupplyModel;
+import com.transaction_microservice.transaction.domain.model.supply.SupplyModel;
 import com.transaction_microservice.transaction.domain.spi.IStockConnectionPersistencePort;
 import com.transaction_microservice.transaction.domain.spi.ISupplyModelPersistencePort;
 import com.transaction_microservice.transaction.domain.util.Util;

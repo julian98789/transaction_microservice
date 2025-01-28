@@ -1,6 +1,6 @@
 package com.transaction_microservice.transaction.infrastructure.persistence.jpa.adapter;
 
-import com.transaction_microservice.transaction.domain.model.SupplyModel;
+import com.transaction_microservice.transaction.domain.model.supply.SupplyModel;
 import com.transaction_microservice.transaction.domain.spi.ISupplyModelPersistencePort;
 import com.transaction_microservice.transaction.infrastructure.persistence.jpa.entity.SupplyEntity;
 import com.transaction_microservice.transaction.infrastructure.persistence.jpa.mapper.ISupplyEntityMapper;

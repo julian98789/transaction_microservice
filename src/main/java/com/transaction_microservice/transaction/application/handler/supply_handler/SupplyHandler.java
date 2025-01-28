@@ -1,4 +1,4 @@
-package com.transaction_microservice.transaction.application.handler;
+package com.transaction_microservice.transaction.application.handler.supply_handler;
 
 import com.transaction_microservice.transaction.application.dto.supply_dto.NextSupplyResponse;
 import com.transaction_microservice.transaction.application.dto.supply_dto.SupplyRequest;
@@ -6,7 +6,7 @@ import com.transaction_microservice.transaction.application.dto.supply_dto.Suppl
 import com.transaction_microservice.transaction.application.mapper.supply_mapper.ISupplyRequestMapper;
 import com.transaction_microservice.transaction.application.mapper.supply_mapper.ISupplyResponseMapper;
 import com.transaction_microservice.transaction.domain.api.ISupplyModelServicePort;
-import com.transaction_microservice.transaction.domain.model.SupplyModel;
+import com.transaction_microservice.transaction.domain.model.supply.SupplyModel;
 import com.transaction_microservice.transaction.domain.security.IAuthenticationSecurityPort;
 import com.transaction_microservice.transaction.domain.util.Util;
 import jakarta.transaction.Transactional;
