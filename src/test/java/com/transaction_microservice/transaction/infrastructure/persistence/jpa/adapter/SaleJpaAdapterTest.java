@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class SaleJpaAdapterTest {
@@ -31,8 +32,8 @@ class SaleJpaAdapterTest {
     }
 
     @Test
-    @DisplayName("Guarda la venta")
-    void testSaveSale() {
+    @DisplayName("Save Sale - should save and return the saved SalesModel")
+    void shouldSaveAndReturnSalesModel() {
         SalesModel salesModel = new SalesModel();
         SalesEntity salesEntity = new SalesEntity();
 
@@ -43,5 +44,9 @@ class SaleJpaAdapterTest {
         SalesModel result = saleJpaAdapter.saveSale(salesModel);
 
         assertEquals(salesModel, result);
+
+        verify(saleEntityMapper).salesModelToSalesEntity(salesModel);
+        verify(saleRepository).save(salesEntity);
+        verify(saleEntityMapper).salesEntityToSalesModel(salesEntity);
     }
 }

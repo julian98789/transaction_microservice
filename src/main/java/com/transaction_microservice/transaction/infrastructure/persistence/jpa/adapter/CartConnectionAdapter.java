@@ -1,7 +1,7 @@
 package com.transaction_microservice.transaction.infrastructure.persistence.jpa.adapter;
 
-import com.transaction_microservice.transaction.application.dto.cart_dto.CartResponse;
-import com.transaction_microservice.transaction.application.mapper.cart_mapper.ICartResponseMapper;
+import com.transaction_microservice.transaction.application.dto.cartdto.CartResponse;
+import com.transaction_microservice.transaction.application.mapper.cartmapper.ICartResponseMapper;
 import com.transaction_microservice.transaction.domain.model.cart.CartModel;
 import com.transaction_microservice.transaction.domain.spi.ICartConnectionPersistencePort;
 import com.transaction_microservice.transaction.infrastructure.http.feign.ICartFeignClient;
@@ -18,7 +18,9 @@ public class CartConnectionAdapter implements ICartConnectionPersistencePort {
 
     @Override
     public List<CartModel> getCartByUser(Long userId) {
+
        List<CartResponse> cartResponse = cartFeignClient.getCartByUser();
+
        return cartResponseMapper.cartResponseToCartModel(cartResponse);
     }
 

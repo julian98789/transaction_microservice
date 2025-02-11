@@ -1,7 +1,7 @@
 package com.transaction_microservice.transaction.infrastructure.http.feign;
 
-import com.transaction_microservice.transaction.application.dto.sale_dto.SaleReportResponse;
-import com.transaction_microservice.transaction.application.dto.sale_dto.SaleRequest;
+import com.transaction_microservice.transaction.application.dto.saledto.SaleReportResponse;
+import com.transaction_microservice.transaction.application.dto.saledto.SaleRequest;
 import com.transaction_microservice.transaction.domain.util.Util;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;

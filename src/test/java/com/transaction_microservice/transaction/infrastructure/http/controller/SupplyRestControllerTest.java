@@ -1,61 +1,84 @@
 package com.transaction_microservice.transaction.infrastructure.http.controller;
 
-import com.transaction_microservice.transaction.application.dto.supply_dto.NextSupplyResponse;
-import com.transaction_microservice.transaction.application.dto.supply_dto.SupplyRequest;
-import com.transaction_microservice.transaction.application.dto.supply_dto.SupplyResponse;
-import com.transaction_microservice.transaction.application.handler.supply_handler.ISupplyHandler;
+import com.transaction_microservice.transaction.application.dto.supplydto.NextSupplyResponse;
+import com.transaction_microservice.transaction.application.dto.supplydto.SupplyRequest;
+import com.transaction_microservice.transaction.application.dto.supplydto.SupplyResponse;
+import com.transaction_microservice.transaction.application.handler.supplyhandler.SupplyHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
- class SupplyRestControllerTest {
-
-    @Mock
-    private ISupplyHandler supplyHandler;
+@ExtendWith(MockitoExtension.class)
+class SupplyRestControllerTest {
 
     @InjectMocks
-    private SupplyRestController supplyRestController;
+    private SupplyRestController supplyController;
+
+    @Mock
+    private SupplyHandler supplyHandler;
+
+    private MockMvc mockMvc;
+
+    private ObjectMapper objectMapper;
+
+    private SupplyRequest supplyRequest;
+    private SupplyResponse supplyResponse;
+    private NextSupplyResponse nextSupplyResponse;
 
     @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+    void setUp() {
+        objectMapper = new ObjectMapper();
 
+        mockMvc = MockMvcBuilders.standaloneSetup(supplyController).build();
 
-    @Test
-    @DisplayName("Agregar producto al suministro")
-     void testAgregarArticletToSupply() {
-        SupplyRequest supplyRequest = new SupplyRequest();
-        SupplyResponse supplyResponse = new SupplyResponse();
-
-        when(supplyHandler.saveSupply(any(SupplyRequest.class), anyLong())).thenReturn(supplyResponse);
-
-        ResponseEntity<SupplyResponse> response = supplyRestController.agregarArticletToSupply(1L, supplyRequest);
-
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(supplyResponse, response.getBody());
+         supplyRequest = new SupplyRequest();
+         supplyResponse = new SupplyResponse();
+         nextSupplyResponse = new NextSupplyResponse();
     }
 
     @Test
-    @DisplayName("Obtener la próxima fecha de suministro")
-     void testGetNextSupplyDate() {
-        NextSupplyResponse nextSupplyResponse = new NextSupplyResponse();
+    @DisplayName("Add product to supply - should return 201 Created with JSON response")
+    void shouldAddProductToSupply() throws Exception {
+        Long articleId = 1L;
 
+        when(supplyHandler.saveSupply(any(SupplyRequest.class), eq(articleId))).thenReturn(supplyResponse);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/supply/agregar-articulo/{articleId}", articleId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(supplyRequest)))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(supplyResponse)));
+
+        verify(supplyHandler, times(1)).saveSupply(any(SupplyRequest.class), eq(articleId));
+    }
+
+    @Test
+    @DisplayName("Get next supply date - should return 200 OK with JSON response")
+    void shouldGetNextSupplyDate() throws Exception {
         when(supplyHandler.getNextSupplyDate(anyLong())).thenReturn(nextSupplyResponse);
 
-        ResponseEntity<NextSupplyResponse> response = supplyRestController.getNextSupplyDate(1L);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/supply/next-supply-date/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(nextSupplyResponse)));
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(nextSupplyResponse, response.getBody());
+        verify(supplyHandler, times(1)).getNextSupplyDate(1L);
     }
 }

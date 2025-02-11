@@ -9,7 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class AuthenticationAdapter implements IAuthenticationSecurityPort {
     @Override
     public Long getAuthenticatedUserId() {
+
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         return Long.valueOf( userDetails.getUsername());
     }
 }
