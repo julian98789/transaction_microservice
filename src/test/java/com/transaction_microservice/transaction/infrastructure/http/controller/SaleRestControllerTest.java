@@ -1,20 +1,27 @@
 package com.transaction_microservice.transaction.infrastructure.http.controller;
 
-import com.transaction_microservice.transaction.application.dto.sale_dto.SaleReportResponse;
-import com.transaction_microservice.transaction.application.handler.sale_handler.ISaleHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.transaction_microservice.transaction.application.dto.saledto.SaleReportResponse;
+import com.transaction_microservice.transaction.application.handler.salehandler.ISaleHandler;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@ExtendWith(MockitoExtension.class)
 class SaleRestControllerTest {
+
+    private MockMvc mockMvc;
 
     @Mock
     private ISaleHandler saleHandler;
@@ -22,20 +29,29 @@ class SaleRestControllerTest {
     @InjectMocks
     private SaleRestController saleRestController;
 
+    private ObjectMapper objectMapper;
+    private SaleReportResponse saleReportResponse;
+
     @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
+    void setUp() {
+        objectMapper = new ObjectMapper();
+
+        mockMvc = MockMvcBuilders.standaloneSetup(saleRestController).build();
+
+        saleReportResponse = new SaleReportResponse();
     }
 
     @Test
-    @DisplayName("Compra artículos del carrito y verifica la respuesta")
-     void testBuyItems() {
-        SaleReportResponse saleReportResponse = new SaleReportResponse();
+    void buyItems_ShouldReturnSaleReportResponse() throws Exception {
+
         when(saleHandler.buyItemsFromTheCart()).thenReturn(saleReportResponse);
 
-        ResponseEntity<SaleReportResponse> response = saleRestController.buyItems();
+        mockMvc.perform(post("/api/supply/buy-cart")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(objectMapper.writeValueAsString(saleReportResponse)));
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(saleReportResponse, response.getBody());
+        verify(saleHandler, times(1)).buyItemsFromTheCart();
     }
 }

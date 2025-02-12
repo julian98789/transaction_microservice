@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class SaleDetailJpaAdapterTest {
@@ -31,18 +32,26 @@ class SaleDetailJpaAdapterTest {
     }
 
     @Test
-    @DisplayName("Guarda el modelo de detalles de venta")
-    void testSaveSaleDetailsModel() {
+    @DisplayName("Save SaleDetailsModel - should save and return the saved SaleDetailsModel")
+    void shouldSaveAndReturnSaleDetailsModel() {
         SaleDetailsModel saleDetailsModel = new SaleDetailsModel();
         SaleDetailsEntity saleDetailsEntity = new SaleDetailsEntity();
         SaleDetailsEntity savedSaleDetailsEntity = new SaleDetailsEntity();
 
-        when(saleDetailsEntityMapper.saleDetailsModelToSaleDetailsEntity(saleDetailsModel)).thenReturn(saleDetailsEntity);
+        when(saleDetailsEntityMapper.saleDetailsModelToSaleDetailsEntity(saleDetailsModel))
+                .thenReturn(saleDetailsEntity);
+
         when(saleDetailsRepository.save(saleDetailsEntity)).thenReturn(savedSaleDetailsEntity);
-        when(saleDetailsEntityMapper.saleDetailsEntityToSaleDetailsModel(savedSaleDetailsEntity)).thenReturn(saleDetailsModel);
+
+        when(saleDetailsEntityMapper.saleDetailsEntityToSaleDetailsModel(savedSaleDetailsEntity))
+                .thenReturn(saleDetailsModel);
 
         SaleDetailsModel result = saleDetailJpaAdapter.saveSaleDetailsModel(saleDetailsModel);
 
         assertEquals(saleDetailsModel, result);
+
+        verify(saleDetailsEntityMapper).saleDetailsModelToSaleDetailsEntity(saleDetailsModel);
+        verify(saleDetailsRepository).save(saleDetailsEntity);
+        verify(saleDetailsEntityMapper).saleDetailsEntityToSaleDetailsModel(savedSaleDetailsEntity);
     }
 }

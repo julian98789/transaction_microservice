@@ -15,6 +15,7 @@ public class SaleDetailJpaAdapter implements ISaleDetailModelPersistencePort {
 
     @Override
     public SaleDetailsModel saveSaleDetailsModel(SaleDetailsModel saleDetailsModel) {
+
         SaleDetailsEntity saleDetailsEntity = saleDetailsEntityMapper.saleDetailsModelToSaleDetailsEntity(saleDetailsModel);
 
         SaleDetailsEntity saveDetails= saleDetailsRepository.save(saleDetailsEntity);

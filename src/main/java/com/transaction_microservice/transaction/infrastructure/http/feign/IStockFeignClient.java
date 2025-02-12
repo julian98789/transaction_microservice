@@ -1,6 +1,6 @@
 package com.transaction_microservice.transaction.infrastructure.http.feign;
 
-import com.transaction_microservice.transaction.application.dto.article_dto.ArticleQuantityRequest;
+import com.transaction_microservice.transaction.application.dto.articledto.ArticleQuantityRequest;
 import com.transaction_microservice.transaction.domain.util.Util;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;

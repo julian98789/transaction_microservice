@@ -14,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class SupplyJpaAdapterTest {
@@ -27,17 +28,19 @@ class SupplyJpaAdapterTest {
     @InjectMocks
     private SupplyJpaAdapter supplyJpaAdapter;
 
+    private SupplyModel supplyModel;
+    private SupplyEntity supplyEntity;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        supplyModel = new SupplyModel();
+        supplyEntity = new SupplyEntity();
     }
 
     @Test
-    @DisplayName("Guarda el suministro")
-    void testSaveSupply() {
-        SupplyModel supplyModel = new SupplyModel();
-        SupplyEntity supplyEntity = new SupplyEntity();
-
+    @DisplayName("Save Supply - should save and return the saved SupplyModel")
+    void shouldSaveAndReturnSupplyModel() {
         when(supplyEntityMapper.supplyModelToSupplyEntity(supplyModel)).thenReturn(supplyEntity);
         when(supplyRepository.save(supplyEntity)).thenReturn(supplyEntity);
         when(supplyEntityMapper.supplyEntityToSupplyModel(supplyEntity)).thenReturn(supplyModel);
@@ -45,14 +48,16 @@ class SupplyJpaAdapterTest {
         SupplyModel result = supplyJpaAdapter.saveSupply(supplyModel);
 
         assertEquals(supplyModel, result);
+
+        verify(supplyEntityMapper).supplyModelToSupplyEntity(supplyModel);
+        verify(supplyRepository).save(supplyEntity);
+        verify(supplyEntityMapper).supplyEntityToSupplyModel(supplyEntity);
     }
 
     @Test
-    @DisplayName("Obtiene el suministro por ID")
-    void testGetSupplyById() {
+    @DisplayName("Get Supply by ID - should return the SupplyModel for the given ID")
+    void shouldReturnSupplyModelById() {
         Long supplyId = 1L;
-        SupplyEntity supplyEntity = new SupplyEntity();
-        SupplyModel supplyModel = new SupplyModel();
 
         when(supplyRepository.findById(supplyId)).thenReturn(Optional.of(supplyEntity));
         when(supplyEntityMapper.supplyEntityToSupplyModel(supplyEntity)).thenReturn(supplyModel);
@@ -60,5 +65,8 @@ class SupplyJpaAdapterTest {
         SupplyModel result = supplyJpaAdapter.getSupplyById(supplyId);
 
         assertEquals(supplyModel, result);
+
+        verify(supplyRepository).findById(supplyId);
+        verify(supplyEntityMapper).supplyEntityToSupplyModel(supplyEntity);
     }
 }

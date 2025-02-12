@@ -1,7 +1,7 @@
 package com.transaction_microservice.transaction.infrastructure.persistence.jpa.adapter;
 
-import com.transaction_microservice.transaction.application.dto.cart_dto.CartResponse;
-import com.transaction_microservice.transaction.application.mapper.cart_mapper.ICartResponseMapper;
+import com.transaction_microservice.transaction.application.dto.cartdto.CartResponse;
+import com.transaction_microservice.transaction.application.mapper.cartmapper.ICartResponseMapper;
 import com.transaction_microservice.transaction.domain.model.cart.CartModel;
 import com.transaction_microservice.transaction.infrastructure.http.feign.ICartFeignClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,8 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class CartConnectionAdapterTest {
 
@@ -35,8 +34,8 @@ class CartConnectionAdapterTest {
     }
 
     @Test
-    @DisplayName("Obtiene el carrito por usuario")
-    void testGetCartByUser() {
+    @DisplayName("Should retrieve cart by user ID")
+    void shouldRetrieveCartByUserId() {
         Long userId = 1L;
         CartResponse cartResponse = new CartResponse();
         List<CartResponse> cartResponseList = Collections.singletonList(cartResponse);
@@ -49,15 +48,20 @@ class CartConnectionAdapterTest {
         List<CartModel> result = cartConnectionAdapter.getCartByUser(userId);
 
         assertEquals(cartModelList, result);
+
+        verify(cartFeignClient, times(1)).getCartByUser();
+        verify(cartResponseMapper, times(1)).cartResponseToCartModel(cartResponseList);
     }
 
     @Test
-    @DisplayName("Elimina el carrito por usuario")
-    void testDeleteCartByUser() {
+    @DisplayName("Should delete cart by user ID")
+    void shouldDeleteCartByUserId() {
         Long userId = 1L;
+
+        doNothing().when(cartFeignClient).deleteCartByUser();
 
         cartConnectionAdapter.deleteCartByUser(userId);
 
-        verify(cartFeignClient).deleteCartByUser();
+        verify(cartFeignClient, times(1)).deleteCartByUser();
     }
 }

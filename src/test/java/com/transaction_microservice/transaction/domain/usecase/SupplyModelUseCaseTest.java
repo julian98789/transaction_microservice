@@ -15,10 +15,9 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.*;
 
- class SupplyModelUseCaseTest {
+class SupplyModelUseCaseTest {
 
     @Mock
     private ISupplyModelPersistencePort supplyModelPersistencePort;
@@ -29,15 +28,22 @@ import static org.mockito.Mockito.doNothing;
     @InjectMocks
     private SupplyModelUseCase supplyModelUseCase;
 
+    private SupplyModel supplyModel;
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+
+        supplyModel = new SupplyModel();
     }
 
     @Test
-    @DisplayName("Guardar suministro exitosamente")
-     void testSaveSupplySuccess() {
-        SupplyModel supplyModel = new SupplyModel(1L, 1L, 10, 1L, LocalDate.now().plusDays(1), LocalDate.now());
+    @DisplayName("Save supply successfully")
+    void shouldSaveSupplySuccessfully() {
+
+        supplyModel.setArticleId(1L);
+        supplyModel.setQuantity(10);
+        supplyModel.setNextSupplyDate(LocalDate.now());
 
         when(stockConnectionPersistencePort.existById(anyLong())).thenReturn(true);
         doNothing().when(stockConnectionPersistencePort).updateQuantityArticle(anyLong(), any(Integer.class));
@@ -46,21 +52,22 @@ import static org.mockito.Mockito.doNothing;
         SupplyModel result = supplyModelUseCase.saveSupply(supplyModel, 1L);
 
         assertEquals(supplyModel, result);
+
+        verify(stockConnectionPersistencePort, times(1)).existById(anyLong());
+        verify(stockConnectionPersistencePort, times(1)).updateQuantityArticle(anyLong(), any(Integer.class));
+        verify(supplyModelPersistencePort, times(1)).saveSupply(any(SupplyModel.class));
     }
 
-
-
     @Test
-    @DisplayName("Obtener próxima fecha de suministro exitosamente")
-    void testGetNextSupplyDateSuccess() {
-        SupplyModel supplyModel = new SupplyModel(1L, 1L, 10, 1L, LocalDate.now().plusDays(1), LocalDate.now());
+    @DisplayName("Get next supply date successfully")
+    void shouldGetNextSupplyDateSuccessfully() {
 
         when(supplyModelPersistencePort.getSupplyById(anyLong())).thenReturn(supplyModel);
 
         LocalDate result = supplyModelUseCase.getNextSupplyDate(1L);
 
         assertEquals(supplyModel.getNextSupplyDate(), result);
+
+        verify(supplyModelPersistencePort, times(1)).getSupplyById(anyLong());
     }
-
-
 }

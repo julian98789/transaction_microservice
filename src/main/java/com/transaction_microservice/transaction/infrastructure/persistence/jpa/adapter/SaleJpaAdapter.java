@@ -19,10 +19,11 @@ public class SaleJpaAdapter implements ISaleModelPersistencePort {
     private final ISaleRepository saleRepository;
     private final ISaleEntityMapper saleEntityMapper;
 
-
     @Override
     public SalesModel saveSale(SalesModel salesModel) {
+
         SalesEntity salesEntity = saleEntityMapper.salesModelToSalesEntity(salesModel);
         return saleEntityMapper.salesEntityToSalesModel(saleRepository.save(salesEntity));
+
     }
 }

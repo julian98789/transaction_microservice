@@ -51,51 +51,65 @@ public class SaleModelUseCase implements ISaleModelServicePort {
 
         try {
             validateStockForAllArticles(articlesInCart);
+
             SalesModel salesModel = processSales(articlesInCart, userId);
-            generateSaleReport(salesModel);
+
             clearUserCart(userId);
 
             return saleReportConnectionPersistencePort.createSaleReport(salesModel);
+
         } catch (Exception e) {
             throw new PurchaseException(Util.PURCHASE_ERROR, e);
         }
     }
 
     private void validateCartNotEmpty(List<CartModel> articlesInCart) {
+
         if (isCartEmpty(articlesInCart)) {
             throw new CartEmptyException(Util.CART_EMPTY);
         }
     }
 
     private boolean isCartEmpty(List<CartModel> articlesInCart) {
+
         return articlesInCart == null || articlesInCart.isEmpty();
     }
 
     private void validateStockForAllArticles(List<CartModel> articlesInCart) {
-        articlesInCart.forEach(cart -> validateStockAvailability(cart.getArticleId(), cart.getQuantity()));
+
+        articlesInCart.forEach
+                (cart -> validateStockAvailability
+                        (cart.getArticleId(), cart.getQuantity()));
     }
 
     private void validateStockAvailability(Long articleId, int totalQuantity) {
+
         if (!stockConnectionPersistencePort.isStockSufficient(articleId, totalQuantity)) {
+
             String nextSupplyDate = supplyModelServicePort.getNextSupplyDate(articleId).toString();
             throw new InsufficientStockException(Util.INSUFFICIENT_STOCK, nextSupplyDate);
         }
     }
 
     private SalesModel processSales(List<CartModel> articlesInCart, Long userId) {
+
         SalesModel sale = initializeSale(userId);
         List<SaleDetailsModel> saleDetails = generateSaleDetails(articlesInCart, sale);
+
         return saveSaleWithDetails(sale, saleDetails);
     }
 
     private SalesModel initializeSale(Long userId) {
+
         SalesModel sale = new SalesModel();
         sale.setUserId(userId);
         sale.setCreationDate(LocalDate.now());
+
         return sale;
     }
 
     private List<SaleDetailsModel> generateSaleDetails(List<CartModel> articlesInCart, SalesModel sale) {
+
         List<SaleDetailsModel> saleDetailsModels = new ArrayList<>();
         double total = 0.0;
 
@@ -104,35 +118,37 @@ public class SaleModelUseCase implements ISaleModelServicePort {
             saleDetailsModels.add(saleDetailsModel);
             total += saleDetailsModel.getSubtotal();
         }
-
         sale.setTotal(total);
+
         return saleDetailsModels;
     }
 
     private SaleDetailsModel createSaleDetail(CartModel cart) {
+
         SaleDetailsModel saleDetailsModel = new SaleDetailsModel();
         saleDetailsModel.setArticleId(cart.getArticleId());
         saleDetailsModel.setQuantity(cart.getQuantity());
         saleDetailsModel.setPrice(stockConnectionPersistencePort.getArticlePriceById(cart.getArticleId()));
         saleDetailsModel.setSubtotal(saleDetailsModel.getPrice() * saleDetailsModel.getQuantity());
+
         return saleDetailsModel;
     }
 
     private SalesModel saveSaleWithDetails(SalesModel sale, List<SaleDetailsModel> saleDetails) {
+
         SalesModel savedSale = saleModelPersistencePort.saveSale(sale);
+
         saleDetails.forEach(detail -> detail.setSale(savedSale));
         List<SaleDetailsModel> savedDetails = saleDetails.stream()
                 .map(saleDetailModelPersistencePort::saveSaleDetailsModel)
                 .toList();
+
         savedSale.setSaleDetails(savedDetails);
         return savedSale;
     }
 
-    private void generateSaleReport(SalesModel salesModel) {
-        saleReportConnectionPersistencePort.createSaleReport(salesModel);
-    }
-
     private void clearUserCart(Long userId) {
+
         cartConnectionPersistencePort.deleteCartByUser(userId);
     }
 }

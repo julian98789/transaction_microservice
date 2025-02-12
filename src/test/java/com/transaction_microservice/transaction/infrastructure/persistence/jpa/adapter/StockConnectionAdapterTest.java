@@ -1,6 +1,6 @@
 package com.transaction_microservice.transaction.infrastructure.persistence.jpa.adapter;
 
-import com.transaction_microservice.transaction.application.dto.article_dto.ArticleQuantityRequest;
+import com.transaction_microservice.transaction.application.dto.articledto.ArticleQuantityRequest;
 import com.transaction_microservice.transaction.infrastructure.http.feign.IStockFeignClient;
 import feign.FeignException;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,8 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class StockConnectionAdapterTest {
 
@@ -26,62 +25,76 @@ class StockConnectionAdapterTest {
     @InjectMocks
     private StockConnectionAdapter stockConnectionAdapter;
 
+    private Long articleId = 1L;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
+
+
     @Test
-    @DisplayName("Existe por ID")
-    void testExistById() {
-        Long articleId = 1L;
+    @DisplayName("Check if article exists by ID - should return true if exists")
+    void shouldReturnTrueIfArticleExistsById() {
+        articleId = 1L;
         when(stockFeignClient.getArticleById(articleId)).thenReturn(true);
 
         boolean result = stockConnectionAdapter.existById(articleId);
 
         assertTrue(result);
+
+        verify(stockFeignClient, times(1)).getArticleById(articleId);
     }
 
     @Test
-    @DisplayName("No existe por ID")
-    void testExistById_NotFound() {
-        Long articleId = 1L;
+    @DisplayName("Check if article exists by ID - should return false if not found")
+    void shouldReturnFalseIfArticleDoesNotExistById() {
+        articleId = 1L;
         when(stockFeignClient.getArticleById(articleId)).thenThrow(FeignException.NotFound.class);
 
         boolean result = stockConnectionAdapter.existById(articleId);
 
         assertFalse(result);
+
+        verify(stockFeignClient, times(1)).getArticleById(articleId);
     }
 
     @Test
-    @DisplayName("El stock es suficiente")
-    void testIsStockSufficient() {
-        Long articleId = 1L;
+    @DisplayName("Check if stock is sufficient - should return true if sufficient")
+    void shouldReturnTrueIfStockIsSufficient() {
+        articleId = 1L;
         Integer articleQuantity = 10;
         when(stockFeignClient.isStockSufficient(articleId, articleQuantity)).thenReturn(true);
 
         boolean result = stockConnectionAdapter.isStockSufficient(articleId, articleQuantity);
 
         assertTrue(result);
+
+        verify(stockFeignClient, times(1)).isStockSufficient(articleId, articleQuantity);
     }
 
     @Test
-    @DisplayName("El stock no es suficiente")
-    void testIsStockSufficient_NotFound() {
-        Long articleId = 1L;
+    @DisplayName("Check if stock is sufficient - should return false if not sufficient")
+    void shouldReturnFalseIfStockIsNotSufficient() {
+        articleId = 1L;
         Integer articleQuantity = 10;
         when(stockFeignClient.isStockSufficient(articleId, articleQuantity)).thenThrow(FeignException.NotFound.class);
 
         boolean result = stockConnectionAdapter.isStockSufficient(articleId, articleQuantity);
 
         assertFalse(result);
+
+        verify(stockFeignClient, times(1)).isStockSufficient(articleId, articleQuantity);
     }
 
     @Test
-    @DisplayName("Actualiza la cantidad del artículo")
-    void testUpdateQuantityArticle() {
-        Long articleId = 1L;
+    @DisplayName("Update article quantity - should update the quantity")
+    void shouldUpdateArticleQuantity() {
+        articleId = 1L;
         Integer quantity = 10;
+
+        doNothing().when(stockFeignClient).updateArticleQuantity(articleId, new ArticleQuantityRequest(quantity));
 
         stockConnectionAdapter.updateQuantityArticle(articleId, quantity);
 
@@ -89,11 +102,12 @@ class StockConnectionAdapterTest {
     }
 
     @Test
-    @DisplayName("Obtiene el precio del artículo por ID")
-    void testReduceArticleQuantity() {
-        Long articleId = 1L;
+    @DisplayName("Reduce article quantity - should reduce the quantity")
+    void shouldReduceArticleQuantity() {
+        articleId = 1L;
         Integer articleQuantity = 10;
 
+        doNothing().when(stockFeignClient).reduceArticleQuantity(articleId, new ArticleQuantityRequest(articleQuantity));
 
         stockConnectionAdapter.reduceArticleQuantity(articleId, articleQuantity);
 
@@ -101,14 +115,16 @@ class StockConnectionAdapterTest {
     }
 
     @Test
-    @DisplayName("Obtiene el precio del artículo por ID")
-    void testGetArticlePriceById() {
-        Long articleId = 1L;
+    @DisplayName("Get article price by ID - should return the price")
+    void shouldReturnArticlePriceById() {
+        articleId = 1L;
         Double price = 100.0;
         when(stockFeignClient.getArticlePriceById(articleId)).thenReturn(price);
 
         Double result = stockConnectionAdapter.getArticlePriceById(articleId);
 
         assertEquals(price, result);
+
+        verify(stockFeignClient, times(1)).getArticlePriceById(articleId);
     }
 }

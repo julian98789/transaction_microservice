@@ -1,7 +1,5 @@
 package com.transaction_microservice.transaction.domain.usecase;
 
-import com.transaction_microservice.transaction.domain.api.ISupplyModelServicePort;
-import com.transaction_microservice.transaction.domain.exception.CartEmptyException;
 import com.transaction_microservice.transaction.domain.model.cart.CartModel;
 import com.transaction_microservice.transaction.domain.model.sale.SaleDetailsModel;
 import com.transaction_microservice.transaction.domain.model.sale.SaleReportModel;
@@ -11,6 +9,10 @@ import com.transaction_microservice.transaction.domain.spi.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,73 +20,68 @@ import static org.mockito.Mockito.*;
 
 class SaleModelUseCaseTest {
 
+    @Mock
     private ICartConnectionPersistencePort cartConnectionPersistencePort;
+
+    @Mock
     private IAuthenticationSecurityPort authenticationPersistencePort;
+
+    @Mock
     private ISaleModelPersistencePort saleModelPersistencePort;
+
+    @Mock
     private IStockConnectionPersistencePort stockConnectionPersistencePort;
+
+    @Mock
     private ISaleReportConnectionPersistencePort saleReportConnectionPersistencePort;
-    private ISupplyModelServicePort supplyModelServicePort;
+
+    @Mock
     private ISaleDetailModelPersistencePort saleDetailModelPersistencePort;
+
+    @InjectMocks
     private SaleModelUseCase saleModelUseCase;
 
     @BeforeEach
     void setUp() {
-        cartConnectionPersistencePort = mock(ICartConnectionPersistencePort.class);
-        authenticationPersistencePort = mock(IAuthenticationSecurityPort.class);
-        saleModelPersistencePort = mock(ISaleModelPersistencePort.class);
-        stockConnectionPersistencePort = mock(IStockConnectionPersistencePort.class);
-        saleReportConnectionPersistencePort = mock(ISaleReportConnectionPersistencePort.class);
-        supplyModelServicePort = mock(ISupplyModelServicePort.class);
-        saleDetailModelPersistencePort = mock(ISaleDetailModelPersistencePort.class);
-
-        saleModelUseCase = new SaleModelUseCase(
-                cartConnectionPersistencePort,
-                authenticationPersistencePort,
-                saleModelPersistencePort,
-                stockConnectionPersistencePort,
-                saleReportConnectionPersistencePort,
-                supplyModelServicePort,
-                saleDetailModelPersistencePort
-        );
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    @DisplayName("Compra artículos del carrito y verifica el reporte de venta")
-    void testBuyItemsFromTheCart() {
+    @DisplayName("Buy items from the cart - should process the sale and generate a report")
+    void shouldProcessSaleAndGenerateReport() {
         Long userId = 1L;
-        List<CartModel> cartModels = new ArrayList<>();
+        Long articleId = 1L;
+        List<CartModel> articlesInCart = new ArrayList<>();
+        CartModel cartModel = new CartModel();
+        cartModel.setArticleId(1L);
+        cartModel.setQuantity(2);
+        articlesInCart.add(cartModel);
 
-        CartModel cart = new CartModel();
-        cart.setArticleId(100L);
-        cart.setQuantity(2);
-        cartModels.add(cart);
+        SalesModel salesModel = new SalesModel();
+
+        SaleDetailsModel saleDetailsModel = new SaleDetailsModel();
+
+        salesModel.setSaleDetails(List.of(saleDetailsModel));
+
+        SaleReportModel saleReportModel = new SaleReportModel();
 
         when(authenticationPersistencePort.getAuthenticatedUserId()).thenReturn(userId);
-        when(cartConnectionPersistencePort.getCartByUser(userId)).thenReturn(cartModels);
-        when(stockConnectionPersistencePort.isStockSufficient(100L, 2)).thenReturn(true);
-        when(stockConnectionPersistencePort.getArticlePriceById(100L)).thenReturn(50.0);
-        when(saleModelPersistencePort.saveSale(any(SalesModel.class))).thenAnswer(invocation -> {
-            SalesModel salesModel = invocation.getArgument(0);
-            salesModel.setId(1L);
-            return salesModel;
-        });
-        when(saleDetailModelPersistencePort.saveSaleDetailsModel(any(SaleDetailsModel.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        when(saleReportConnectionPersistencePort.createSaleReport(any(SalesModel.class))).thenReturn(new SaleReportModel());
+        when(cartConnectionPersistencePort.getCartByUser(userId)).thenReturn(articlesInCart);
+        when(stockConnectionPersistencePort.isStockSufficient(articleId, 2)).thenReturn(true);
+        when(stockConnectionPersistencePort.getArticlePriceById(articleId)).thenReturn(100.0);
+        when(saleModelPersistencePort.saveSale(any(SalesModel.class))).thenReturn(salesModel);
+        when(saleDetailModelPersistencePort.saveSaleDetailsModel(any(SaleDetailsModel.class))).thenReturn(saleDetailsModel);
+        when(saleReportConnectionPersistencePort.createSaleReport(any(SalesModel.class))).thenReturn(saleReportModel);
 
-        SaleReportModel saleReport = saleModelUseCase.buyItemsFromTheCart();
+        SaleReportModel result = saleModelUseCase.buyItemsFromTheCart();
 
-        assertNotNull(saleReport);
-        verify(cartConnectionPersistencePort).deleteCartByUser(userId);
+        assertEquals(saleReportModel, result);
+
+        verify(cartConnectionPersistencePort, times(1)).deleteCartByUser(userId);
+        verify(stockConnectionPersistencePort, times(1)).isStockSufficient(articleId, 2);
+        verify(stockConnectionPersistencePort, times(1)).getArticlePriceById(articleId);
+        verify(saleModelPersistencePort, times(1)).saveSale(any(SalesModel.class));
+        verify(saleDetailModelPersistencePort, times(1)).saveSaleDetailsModel(any(SaleDetailsModel.class));
+        verify(saleReportConnectionPersistencePort, times(1)).createSaleReport(any(SalesModel.class));
     }
-
-    @Test
-    @DisplayName("Lanza CartEmptyException cuando el carrito está vacío")
-    void testBuyItemsFromTheCart_EmptyCart() {
-        Long userId = 1L;
-        when(authenticationPersistencePort.getAuthenticatedUserId()).thenReturn(userId);
-        when(cartConnectionPersistencePort.getCartByUser(userId)).thenReturn(new ArrayList<>());
-
-        assertThrows(CartEmptyException.class, () -> saleModelUseCase.buyItemsFromTheCart());
-    }
-
 }

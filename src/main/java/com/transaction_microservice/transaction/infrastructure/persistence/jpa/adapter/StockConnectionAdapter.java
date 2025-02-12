@@ -1,6 +1,6 @@
 package com.transaction_microservice.transaction.infrastructure.persistence.jpa.adapter;
 
-import com.transaction_microservice.transaction.application.dto.article_dto.ArticleQuantityRequest;
+import com.transaction_microservice.transaction.application.dto.articledto.ArticleQuantityRequest;
 import com.transaction_microservice.transaction.domain.spi.IStockConnectionPersistencePort;
 import com.transaction_microservice.transaction.infrastructure.http.feign.IStockFeignClient;
 import feign.FeignException;
@@ -14,8 +14,10 @@ public class StockConnectionAdapter implements IStockConnectionPersistencePort {
     @Override
     public boolean existById(Long articleId) {
         try {
+
             return stockFeignClient.getArticleById(articleId);
         } catch (FeignException.NotFound e) {
+
             return false;
         }
     }

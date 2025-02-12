@@ -13,7 +13,10 @@ import java.util.Objects;
 public class JwtRequestInterceptor implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate requestTemplate) {
-        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+
+        HttpServletRequest request = ((ServletRequestAttributes) Objects
+                .requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+
         String jwt = request.getHeader(Util.AUTH_HEADER);
         requestTemplate.header(Util.AUTH_HEADER,  jwt);
     }
